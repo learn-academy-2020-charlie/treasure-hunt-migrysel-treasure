@@ -10,7 +10,7 @@ class App extends Component{
       treasure: null,
       bomb: null,
       //another map function, this array is used to house the new values that we'd use to reassign the value of squares
-      tree: []
+      counter: 9
     }
   }
 
@@ -27,24 +27,38 @@ componentDidMount(){
 
 handleLocation = (indexLocation, value) => {
   // alert (indexLocation)
-  let { squares, bomb, treasure } = this.state
+  let { squares, bomb, treasure, counter } = this.state
+  
   console.log(bomb, treasure);
-  if(indexLocation === bomb ){
+  if(indexLocation === bomb || counter === 0){
 
     squares[indexLocation] = "bomb"
-    this.setState({squares: squares})
+    alert("You lose!!")
+    this.setState({squares: squares, counter: counter })
 
   } else if (indexLocation === treasure) {
     alert("You win!")
     squares[indexLocation] = "treasure"
-    this.setState({squares: squares})
+    counter = counter - 1
+    this.setState({squares: squares, counter: counter })
 
   } else {
     
     squares[indexLocation] = "tree"
-    this.setState({squares: squares})
+    counter = counter - 1
+    this.setState({squares: squares, counter: counter })
 
   }
+}
+
+playAgain = () => {
+  this.setState({ 
+    squares: ["?", "?", "?", "?", "?", "?", "?", "?", "?"],
+      treasure: null,
+      bomb: null,
+      counter: 9
+  })
+  this.componentDidMount()
 }
 
   render(){
@@ -65,6 +79,11 @@ handleLocation = (indexLocation, value) => {
       <div id="board">
         { box }
       </div>
+      <p>Counter: { this.state.counter } </p>
+      <button id="restart"
+      onClick={ this.playAgain }>
+        Play Again!
+      </button>
       </React.Fragment>
     )
   }
